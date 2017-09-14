@@ -85,6 +85,13 @@ function xmlParser(xml) {
         
     });
     
-    console.log(deals);
+    
     return deals;
 }
+
+//Diagrams
+
+
+document.getElementById("bubbleChartButton").onclick() = function() {
+  alert("CLICK!");
+};
