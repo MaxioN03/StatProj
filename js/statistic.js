@@ -1,4 +1,3 @@
-
 //Open XML
 $(document).ready(function () {
     $.ajax({
@@ -9,11 +8,12 @@ $(document).ready(function () {
     });
 });
 
-//Parse XML
-function xmlParser(xml) {   
-    
-    var deals = [];  
 
+var deals = []; 
+
+
+//Parse XML
+function xmlParser(xml) {     
     $('#load').fadeOut();
     $(xml).find("DATA_RECORD").each(function () {        
         
@@ -79,19 +79,83 @@ function xmlParser(xml) {
             DOL: $(this).find("DOL").text()            
             }
         
-        deals.push(deal);  
-        
-        
-        
-    });
+        deals.push(deal);        
+              
+    });       
     
-    
-    return deals;
 }
 
 //Diagrams
+
+//Stacked Diagram
 document.getElementById("bubbleChartButton").onclick = function() {
-    alert("CLICK!");
-    
-    console.log(xmlParser());
+       
+    console.log(deals);
+    var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ["2016", "2017"],
+    datasets: [{
+        //label: '# of Votes 1',
+        data: [10, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(255, 99, 132, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(255,99,132,1)',
+          'rgba(255,99,132,1)',
+          'rgba(255,99,132,1)',
+          'rgba(255,99,132,1)',
+          'rgba(255,99,132,1)'
+        ],
+        borderWidth: 2
+      },
+      {
+        //label: '# of Votes 2',
+        data: [15, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 159, 64, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255, 159, 64, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 2
+      }
+    ]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        stacked: true,
+        ticks: {
+          beginAtZero: true
+        }
+      }],
+      xAxes: [{
+        stacked: true,
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+
+    }
+  }
+});
 };
