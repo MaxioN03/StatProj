@@ -90,8 +90,8 @@ function xmlParser(xml) {
 }
 
 //Diagrams
-
-
-document.getElementById("bubbleChartButton").onclick() = function() {
-  alert("CLICK!");
+document.getElementById("bubbleChartButton").onclick = function() {
+    alert("CLICK!");
+    
+    console.log(xmlParser());
 };
