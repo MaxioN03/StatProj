@@ -3,15 +3,32 @@
 <head>
 	<meta charset="UTF-8">
 	<title>INDEX</title>
+    <link href="../css/style.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script>    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script> 
+    
 </head>
 <body>
     
-<input type="button" id="bubbleChartButton" value="Пузырьковая диаграмма" />
+    <div id="modal_form"><!-- Сaмo oкнo --> 
+      <span id="modal_close">X</span> <!-- Кнoпкa зaкрыть --> 
+               
+    </div>
+    <div id="overlay"></div><!-- Пoдлoжкa -->
     
-<canvas id="myChart" width="600" height="400"></canvas>   
-   
+    
+<input type="button" class="chart" id="stackedChartButton" value="Stacked диаграмма" />
+<input type="button" class="chart" id="bubbleChartButton" value="Пузырьковая диаграмма" />
+<input type="button" class="chart" id="groupedChartButton" value="C группировкой" />
+    <input type="button" class="chart" id="lineChartButton" value="Линейный" />
+     
+    
+
+<div id="graph-container">
+            <canvas id="myChart" width="600px" height="400px"></canvas>    
+        </div> 
 <script src="../js/statistic.js"></script>  
+<script src="../js/modal.js"></script>  
+
 </body>
 </html>

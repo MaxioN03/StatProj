@@ -10,6 +10,7 @@ $(document).ready(function () {
 
 
 var deals = []; 
+var myChart;
 
 
 //Parse XML
@@ -81,75 +82,192 @@ function xmlParser(xml) {
         
         deals.push(deal);        
               
-    });       
+    }); 
+    
+    countYears();
+}
+
+//ReCreate canvas
+var resetCanvas = function(){
+  $('#myChart').remove(); // this is my <canvas> element
+  $('#graph-container').append('<canvas id="myChart" width="600" height="400"></canvas>');  
+};
+
+
+
+
+
+//Подсчёт значений анализируемых лет
+var countDeals = function(){     
+    var parseData = function(date){
+    var dateAndTime = date.split(" ");
+    return dateAndTime[0].split("/")[0];   
+    }
+    
+   var years = new Object();
+    
+   deals.forEach(function(item, i, arr) {
+        if(typeof  years[parseData(item.OPERDATE)] == "undefined"){
+           years[parseData(item.OPERDATE)] = 1;
+        }        
+       else{
+           years[parseData(item.OPERDATE)]++;
+       }
+   });
+    
+   return years;    
+};
+
+//Подсчёт количества лет
+var countYears = function(){
+    var yearsDeals = new Object(); yearsDeals = countDeals();
+    var years = new Array();
+    
+    for(key in yearsDeals){
+        years.push(key);
+        
+    };
+    
+    return years;
     
 }
 
-//Diagrams
 
-//Stacked Diagram
-document.getElementById("bubbleChartButton").onclick = function() {
-       
-    console.log(deals);
-    var ctx = document.getElementById("myChart");
-var myChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ["2016", "2017"],
-    datasets: [{
-        //label: '# of Votes 1',
-        data: [10, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(255, 99, 132, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255,99,132,1)',
-          'rgba(255,99,132,1)',
-          'rgba(255,99,132,1)',
-          'rgba(255,99,132,1)',
-          'rgba(255,99,132,1)',
-          'rgba(255,99,132,1)'
-        ],
-        borderWidth: 2
-      },
-      {
-        //label: '# of Votes 2',
-        data: [15, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 159, 64, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 2
+//Сумма площадей в кв. м по данному году
+var countSquare = function(){
+    var parseData = function(date){
+    var dateAndTime = date.split(" ");
+    return dateAndTime[0].split("/")[0];   
+    }
+    
+    var square = new Array();
+    square = countDeals();
+    
+    for(key in square){
+        square[key] = 0;        
+    } 
+    
+    
+    
+    for(key in square){
+        deals.forEach(function(item, i, arr) {
+        if(parseData(parseData(item.OPERDATE))==key){          
+          square[key]+=parseFloat(item.SQUARE); 
+        }
+    });
+              
+    }
+    return square; 
+};
+
+//Сумма цен сделок в BYN  по данному году
+var countCost = function(){
+    var parseData = function(date){
+    var dateAndTime = date.split(" ");
+    return dateAndTime[0].split("/")[0];   
+    }
+    
+    var cost = new Array();
+    cost = countDeals();
+    
+    for(key in cost){
+        cost[key] = 0;        
+    }    
+    
+    
+    for(key in cost){
+        deals.forEach(function(item, i, arr) {
+        if(parseData(parseData(item.OPERDATE))==key){ 
+          
+          cost[key]+=parseFloat(item.PRICEVALUE); 
+        }
+    });
+              
+    }
+
+    return cost; 
+};
+
+
+//Diagrams
+//Bubble Chart/Пузырькая диаграмма
+document.getElementById("bubbleChartButton").onclick = function(){   
+        
+    var years = new Array(); years = countDeals();
+    var square = new Array(); square = countSquare();
+    var cost = new Array(); cost = countCost();
+    
+    resetCanvas();
+    
+    
+    myChart  = new Chart(document.getElementById("myChart"), {        
+    type: 'bubble',     
+    options: {
+      title: {
+        display: true,
+        text: 'Ёмкость рынка и количество сделок'
+      }, scales: {
+        yAxes: [{ 
+          scaleLabel: {
+            display: true,
+            labelString: "Ёмкость, млн. BYN"
+          }
+        }],
+        xAxes: [{ 
+          scaleLabel: {
+            display: true,
+            labelString: "Ёмкость, тыс. кв. м"
+          }
+        }]
       }
-    ]
-  },
+    }
+});
+
+    for(key in years){
+        var newDataset = {
+        label: key,
+        backgroundColor: 'rgba(99, 255, 132, 0.2)',
+        borderColor: 'rgba(99, 255, 132, 1)',
+        borderWidth: 1,
+        data: [{
+            x: square[key]/1000,
+            y: cost[key]/1000000,
+            r: years[key]
+          }]
+    } 
+       
+   // You add the newly created dataset to the list of `data`
+    myChart.data.datasets.push(newDataset);
+    // You update the chart to take into account the new dataset
+    myChart.update();        
+   
+    }
+    
+    
+}
+ 
+
+//Stacked Diagram / Нормированная гистограмма с накоплением 
+document.getElementById("stackedChartButton").onclick = function() {
+    var years = new Array(); years = countYears();
+    var deals = new Object(); deals = countDeals();
+    var square = new Array(); square = countSquare();
+    var cost = new Array(); cost = countCost();
+    resetCanvas();
+
+var myChart = new Chart(document.getElementById("myChart"), {
+  
+  type: 'bar',   
   options: {
     scales: {
       yAxes: [{
-        stacked: true,
+        
         ticks: {
           beginAtZero: true
         }
       }],
       xAxes: [{
-        stacked: true,
+       
         ticks: {
           beginAtZero: true
         }
@@ -158,4 +276,145 @@ var myChart = new Chart(ctx, {
     }
   }
 });
+    
+    for(key in deals){
+        var newDataset = { 
+        label : key,
+        backgroundColor: 'rgba(99, 255, 132, 0.2)',
+        borderColor: 'rgba(99, 255, 132, 1)',
+        borderWidth: 1,
+        data: [deals[key]]
+    } 
+       
+   // You add the newly created dataset to the list of `data`
+    myChart.data.datasets.push(newDataset);
+    // You update the chart to take into account the new dataset
+    myChart.update();           
+    }
 };
+
+//Гистограмма с группировкой на основной оси и график с маркерами на вспомогательной оси 
+document.getElementById("groupedChartButton").onclick = function() {
+    var year = new Array(); year = countYears();
+    var years = new Array(); years = countDeals();
+    var square = new Array(); square = countSquare();
+    var cost = new Array(); cost = countCost();
+    resetCanvas();
+
+    myChart = new Chart(document.getElementById("myChart"), {
+    type: 'bar', 
+    data:{
+        labels: year
+    },
+    options: {
+    scales: {
+      yAxes: [{
+        id: 'bars',
+        type: 'linear',
+        position: 'left',
+      }, {
+        id: 'lines',
+        type: 'linear',
+        position: 'right'        
+      }]
+    }
+  }
+});
+
+    for(key in years){
+        var newDataset = {        
+        type: 'bar',
+        label: key,
+        backgroundColor: 'rgba(99, 255, 132, 0.2)',
+        borderColor: 'rgba(99, 255, 132, 1)',
+        borderWidth: 1,
+        yAxisID: 'bars',
+        data: [years[key]]
+    } 
+       
+   // You add the newly created dataset to the list of `data`
+    myChart.data.datasets.push(newDataset);
+    // You update the chart to take into account the new dataset
+    myChart.update();           
+    }
+    
+    var dataForLineGraph = new Array();
+    for(key in years){
+        dataForLineGraph.push(cost[key]/square[key]);
+    }
+    console.log(dataForLineGraph);
+    
+    for(key in years){
+        var newDataset = { 
+        type: 'line',
+        label : key,
+        fill:false,
+        backgroundColor: 'rgba(99, 255, 132, 0.2)',
+        borderColor: 'rgba(99, 255, 132, 1)',
+        borderWidth: 1,
+            yAxisID: 'lines',
+        data: dataForLineGraph
+        //data: []
+    } 
+       
+   // You add the newly created dataset to the list of `data`
+    myChart.data.datasets.push(newDataset);
+    // You update the chart to take into account the new dataset
+    myChart.update();           
+    }
+    
+};
+
+//Линейный график
+document.getElementById("lineChartButton").onclick = function() {
+    var years = new Array(); years = countDeals();
+    var square = new Array(); square = countSquare();
+    var cost = new Array(); cost = countCost();
+    resetCanvas();
+
+
+ myChart = new Chart(document.getElementById("myChart"), {
+    type: 'line',
+    //data: data,
+    options: {
+        scales: {
+            yAxes: [{
+                stacked: true
+            }],
+            xAxes: [{
+                stacked: true
+            }]
+        }
+    }
+});
+
+    for(key in years){
+        var newDataset = {        
+        type: 'line',        
+        label: key,
+        backgroundColor: 'rgba(99, 255, 132, 0.2)',
+        borderColor: 'rgba(99, 255, 132, 1)',
+        borderWidth: 1,
+        fill: true,
+        data: [{
+        x: 10,
+        y: 20
+        }, {
+        x: 15,
+        y: 10
+        },{
+        x: 25,
+        y: 30
+        }]
+    } 
+       
+   // You add the newly created dataset to the list of `data`
+    myChart.data.datasets.push(newDataset);
+    // You update the chart to take into account the new dataset
+    myChart.update();           
+    }
+    
+    
+    
+};
+
