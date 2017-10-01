@@ -2,33 +2,19 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>INDEX</title>
-    <link href="../css/style.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	  
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script> 
-    
+	<title>INDEX</title>   
 </head>
 <body>
-    
-    <div id="modal_form"><!-- Сaмo oкнo --> 
-      <span id="modal_close">X</span> <!-- Кнoпкa зaкрыть --> 
-               
-    </div>
-    <div id="overlay"></div><!-- Пoдлoжкa -->
-    
-    
-<input type="button" class="chart" id="stackedChartButton" value="Stacked диаграмма" />
-<input type="button" class="chart" id="bubbleChartButton" value="Пузырьковая диаграмма" />
-<input type="button" class="chart" id="groupedChartButton" value="C группировкой" />
-    <input type="button" class="chart" id="lineChartButton" value="Линейный" />
-     
-    
-
-<div id="graph-container">
-            <canvas id="myChart" width="600px" height="400px"></canvas>    
-        </div> 
-<script src="../js/statistic.js"></script>  
-<script src="../js/modal.js"></script>  
-
+    <input type="button" id="statistic" value="Статистика" /><br><br>
+    <input type="button" id="statistic2" value="Статистика 2" />
+    <script>
+    document.getElementById("statistic").onclick = function(){        
+        var newWin = window.open("statistic.html", "winName" , "resizable=yes,scrollbars=yes, left=1000px")
+    };
+        
+    document.getElementById("statistic2").onclick = function(){        
+        var newWin = window.open("statistic2.html", "winName" , "resizable=yes,scrollbars=yes, left=1000px")
+    };
+    </script>    
 </body>
 </html>

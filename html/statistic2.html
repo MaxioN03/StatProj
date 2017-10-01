@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Статистика</title>
+    <link href="../css/style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../resource/img/icon.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>	  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.js"></script> 
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="../js/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/map.js"></script>
+    
+    
+</head>
+<body>
+<div id="leftPart" >
+    <p class="plyama2">ВЫБОРКА</p>
+<div class="chartBlock2">
+    <img src="../resource/img/nca_logo.png" class="NCALogo"
+  alt="НКА">
+    <canvas id="bubbleChart"></canvas> 
+</div>
+    <div class="chartBlock2">
+    <img src="../resource/img/nca_logo.png" class="NCALogo"
+  alt="НКА">
+    <canvas id="groupedChart" style="width:100%;"></canvas> 
+</div> 
+    <div class="chartBlock2">
+    <img src="../resource/img/nca_logo.png" class="NCALogo"
+  alt="НКА">
+    <canvas id="lineChart" style="width:90%; margin:auto;"></canvas>
+</div>  
+</div> 
+    
+<div id="rightPart" >
+<div class="chartBlock2">
+    <img src="../resource/img/nca_logo.png" class="NCALogo"
+  alt="НКА">
+    <div id="container"  style="width:100%; margin:auto;"></div>
+</div> 
+
+<div class="chartBlock2">
+    <img src="../resource/img/nca_logo.png" class="NCALogo"
+  alt="НКА">
+    <canvas id="stackedChart" style="width:100%; "></canvas> 
+</div>     
+</div> 
+
+
+
+
+
+<script src="../js/statistic.js"></script> 
+<script src="../js/stacked100.js"></script> 
+</body>
+</html>
